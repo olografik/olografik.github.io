@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Audio-Matrix",
+    "version": "v3.2",
+    "description": "Séquenceur midi virtuel avec interface neuronale. Compatible Windows & Linux.",
+    "image": "https://placehold.co/600x400/000000/00ffcc?text=Audio-Matrix",
+    "link": "https://github.com/olografik/audio-matrix"
+  },
+  {
+    "id": "2",
+    "name": "Code-Phantom",
+    "version": "v1.0.4",
+    "description": "IDE léger pour le live-coding en environnement sombre. Coloration syntaxique néon.",
+    "image": "https://placehold.co/600x400/1a1a1a/ff00ff?text=Code+Phantom",
+    "link": "https://github.com/olografik/code-phantom"
+  },
+  {
+    "id": "3",
+    "name": "Server-Glitch",
+    "version": "Beta",
+    "description": "Outil de stress-test pour serveurs web. Simule des attaques DDOS contrôlées.",
+    "image": "https://placehold.co/600x400/050505/00ffcc?text=Server+Glitch",
+    "link": "#"
+  }
+]

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLOGRAFIK // SOFTWARE_HUB</title>
+    <!-- Police Futuriste Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --primary: #00ffcc; /* Cyan Cyber */
+            --secondary: #ff00ff; /* Magenta Cyber */
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-main: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Share Tech Mono', monospace;
+            background-image: 
+                linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px; /* Effet grille */
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            background: rgba(0,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 2px 2px 0px var(--secondary);
+        }
+
+        .subtitle {
+            color: var(--primary);
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* CONTAINER GRILLE */
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* CARTE LOGICIEL (TEMPLATE) */
+        .soft-card {
+            background: var(--glass);
+            border: 1px solid #333;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .soft-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+            transform: translateY(-5px);
+        }
+
+        /* Image avec effet scanline */
+        .card-img {
+            width: 100%;
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 1px solid var(--primary);
+            position: relative;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+
+        .soft-version {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: #000;
+            padding: 2px 8px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        p {
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.3s;
+            background: rgba(0, 255, 204, 0.1);
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* LOADING */
+        #loading {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 1.5rem;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Olografik</h1>
+        <div class="subtitle">System.Initialize(Softwares_Repo);</div>
+    </header>
+
+    <div id="loading">CHARGEMENT DES DONNÉES...</div>
+    
+    <div class="container" id="app-container">
+        <!-- Les logiciels vont s'insérer ici automatiquement -->
+    </div>
+
+    <script>
+        // URL du fichier JSON (en local ou en ligne)
+        const dbUrl = 'data.json';
+        const container = document.getElementById('app-container');
+        const loader = document.getElementById('loading');
+
+        // Fonction pour récupérer et afficher les données
+        async function loadSoftwares() {
+            try {
+                const response = await fetch(dbUrl);
+                if (!response.ok) throw new Error("Erreur HTTP");
+                
+                const softwares = await response.json();
+                
+                // On cache le chargement
+                loader.style.display = 'none';
+
+                // On génère le HTML pour chaque logiciel
+                softwares.forEach(soft => {
+                    const card = document.createElement('div');
+                    card.className = 'soft-card';
+                    
+                    card.innerHTML = `
+                        <div class="card-img" style="background-image: url('${soft.image}');">
+                            <div class="soft-version">${soft.version}</div>
+                        </div>
+                        <div class="card-content">
+                            <h2>${soft.name}</h2>
+                            <p>${soft.description}</p>
+                            <a href="${soft.link}" class="btn">Accéder / Download</a>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error(error);
+                loader.innerHTML = "ERREUR SYSTÈME : Impossible de charger la base de données.";
+                loader.style.color = "red";
+            }
+        }
+
+        // Lancement
+        loadSoftwares();
+    </script>
+</body>
+</html>
